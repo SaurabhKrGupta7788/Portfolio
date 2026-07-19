@@ -1,0 +1,72 @@
+export const detailedProjects = [
+  {
+    id: "health-system",
+    title: "NextGen Health Management System",
+    role: "Team Lead (Coding Masters)",
+    award: "Comprehensive Healthcare Platform",
+    shortDesc: "AI-driven disease prediction, natural remedy search, and real-time organ allocation.",
+    problemTackled: "Critical diseases (cataract, TB, diabetes, brain tumors) are often detected too late due to manual, error-prone segmentation and imbalanced data. Meanwhile, hospital organ/blood supply-demand mismatches cause fatal delays, and patients often rely on unscientific cures or over-prescribed antibiotics for minor ailments.",
+    technologies: ["React", "Django", "PyTorch", "CNN/UNET", "pix2pix GANs"],
+    howItWorks: "The platform offers three core services. First, a search bot for 1,200+ verified Ayurvedic home remedies. Second, an AI pipeline using CNNs to predict diseases (e.g., 98.36% accuracy for TB) and segment brain tumors using pix2pix GANs. Third, a real-time organ and blood tracking system for hospitals.",
+    architecture: "The frontend is built in React, communicating with a robust Django backend. The AI models (ANN, LSTM, CNN) are built in PyTorch. The system also features a unique 'Feedback Learning' pipeline where models are automatically fine-tuned at regular intervals.",
+    results: "Achieved 98.36% accuracy in Tuberculosis prediction using custom CNNs, and successfully generated synthetic medical training data using GANs to balance datasets and reduce bias.",
+    futureScope: "Implementing Visual Prompting LLMs to automatically generate text diagnostic reports from CT scans, utilizing Physics-Informed Neural Networks (PINNs) for heart disease prediction, and applying Federated Learning.",
+    visualScene: "MedicalScanScene"
+  },
+  {
+    id: "drone-surveillance",
+    title: "Monocular Vision Drone Surveillance",
+    role: "Lead Author & ML Researcher",
+    award: "Published Research Paper",
+    shortDesc: "Lightweight YOLOv8 & ResNet-18 pipeline for real-time drone detection and 3D kinematics.",
+    problemTackled: "Real-time UAV surveillance typically requires heavy, expensive sensors like Radar, LiDAR, or Stereo cameras to estimate depth and speed. This makes cost-effective edge deployment highly difficult. Furthermore, detecting tiny drones in 2D space without metric distance scaling leads to severe scale ambiguity.",
+    technologies: ["YOLOv8s", "ResNet-18", "Monocular Depth Estimation", "Camera Geometry", "PyTorch"],
+    howItWorks: "The framework uses a single RGB camera. YOLOv8s generates initial bounding boxes, which are then passed to a ResNet-18 classifier to filter out false positives (like birds). A hybrid mathematical formulation then calculates the drone's metric distance by fusing pinhole camera geometry with scale-adjusted monocular depth cues. Finally, the drone's 3D velocity is computed using temporal differencing across frames.",
+    architecture: "The pipeline is split into a perception module (YOLOv8s + ResNet-18) and a physics module. The perception module runs on GPU, while the physics module computes geometric distance and temporal differencing analytically on CPU to maintain a low memory footprint.",
+    results: "Achieved an AbsRel error of just 0.0478 for distance estimation and ran at 14.81 FPS on an embedded device (NVIDIA Jetson Nano) utilizing only 180MB of VRAM.",
+    futureScope: "Expanding the dataset to improve scale-invariant depth estimation at extreme ranges (>20 meters) and adding multi-camera sensor fusion.",
+    visualScene: "DroneTrackingScene"
+  },
+  {
+    id: "tumor-classification",
+    title: "Colorectal Tumor Classification",
+    role: "Lead Author",
+    award: "Mask-Guided MIL",
+    shortDesc: "Developed a mask-guided Multiple Instance Learning framework classifying colorectal tumors from CT Scans.",
+    problemTackled: "Manual interpretation of volumetric CT scans is highly labor-intensive. Automated systems often struggle with spurious background noise due to the scarcity of detailed slice-level annotations. Standard MIL approaches suffer from the 'bag-of-patches' assumption, ignoring the critical spatial topology of volumetric tumors and leading to frequent misidentification.",
+    technologies: ["PyTorch", "ResNet-18", "Multiple Instance Learning (MIL)", "Top-K Pooling", "PCA", "Logistic Regression"],
+    howItWorks: "The framework uses tumor segmentation masks to extract informative slices from CT volumes, mitigating background noise. Deep features are extracted using a pre-trained ResNet-18 model. A Top-K MIL pooling strategy (K=5) then aggregates these instance-level features into a robust patient-level representation. Finally, classical machine learning classifiers evaluate the features.",
+    architecture: "The pipeline consists of: CT + Mask -> Mask Slice Selection -> Preprocessing (Z-score normalization) -> ResNet-18 Feature Extraction -> Top-K MIL Pooling -> Patient-level Feature Construction (adding Tumor Volume) -> Logistic Regression Classifier -> Prediction.",
+    results: "The mask-guided approach effectively filters irrelevant anatomy. Logistic Regression achieved the best balance with an accuracy of 76.7%, malignant recall of 0.600, and macro F-measure of 0.706 on a dataset of 116 CT scans. It significantly outperformed Max-Pooling MIL and ABMIL baselines.",
+    futureScope: "Validating the framework on larger multi-institutional cohorts and exploring end-to-end trainable MIL architectures.",
+    visualScene: "CTScanScene"
+  },
+  {
+    id: "cosmic-gateway",
+    title: "Cosmic Gateway",
+    role: "ML Engineer",
+    award: "NASA Space Apps Challenge",
+    shortDesc: "Built an interactive platform using ensemble models for exoplanet classification and custom model fine-tuning.",
+    problemTackled: "The Kepler space telescope provides vast amounts of light-curve data, but manual identification of exoplanet transits is prone to human error and simply too slow given the volume of data.",
+    technologies: ["Python", "TensorFlow", "Django", "Kepler API", "Ensemble Learning", "Model Fine-Tuning"],
+    howItWorks: "The pipeline ingests raw light-curve flux data from the Kepler mission. We implemented a robust ensemble method utilizing powerful machine learning models (Random Forest, XGBoost) to analyze the time-series data and detect the signature 'U-shaped' dips caused by transiting planets. Additionally, the platform provides a complete web app environment where users can interactively fine-tune their own models for custom classification tasks.",
+    architecture: "The backend is powered by Django which manages the Kepler API ingestion. Celery workers process the heavy ensemble model inference tasks asynchronously, caching the results in Redis for instant UI rendering.",
+    results: "Successfully identified 94% of confirmed exoplanets in the test set using the ensemble approach, with a false positive rate of under 2%.",
+    futureScope: "Adapting the model to analyze data from the newer TESS (Transiting Exoplanet Survey Satellite) mission.",
+    visualScene: "CosmicGatewayScene"
+  },
+  {
+    id: "anpr-system",
+    title: "Advanced ANPR System",
+    role: "Computer Vision Engineer",
+    award: "High-Speed Inference",
+    shortDesc: "Real-time Automatic Number Plate Recognition system using deep learning for high-speed tracking.",
+    problemTackled: "Manual tracking of vehicle license plates for toll collection or security is slow, expensive, and prone to human error, especially in challenging environments like low-light, high-speed scenarios, or heavy rain.",
+    technologies: ["Python", "YOLOv8", "OpenCV", "Tesseract / EasyOCR", "PyTorch"],
+    howItWorks: "The system ingests live video streams and uses a YOLO-based object detection model to locate vehicles. A secondary model isolates the license plate bounding box. Finally, optical character recognition (OCR) is applied to extract the alphanumeric text, cross-referencing it with an authorized database in real-time.",
+    architecture: "The pipeline consists of: Video Stream -> Frame Extraction -> YOLO Vehicle Detection -> YOLO Plate Localization -> Perspective Transform -> OCR Engine -> Database Match. Optimized with TensorRT for edge deployment.",
+    results: "Achieved a 96% character recognition accuracy across various weather and lighting conditions at 30 FPS.",
+    futureScope: "Integrating temporal smoothing across multiple frames to further reduce OCR flicker and deploying on edge devices like NVIDIA Jetson.",
+    visualScene: "ANPRScene"
+  }
+]
