@@ -1,16 +1,102 @@
-# React + Vite
+﻿# Interactive 3D Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A highly interactive, modern web developer portfolio built with React and Vite. This application features a persistent 3D canvas background and restricts access to the main portfolio content behind a Supabase email authentication gate, providing a unique and secure visitor experience.
 
-Currently, two official plugins are available:
+## Architecture Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+\\\
+User Browser
+    │
+    ▼
+┌──────────────────────────┐
+│  React (App.jsx)         │  ← Manages Global State & Auth Sequence
+└──────────┬───────────────┘
+           │
+    ┌──────┼───────────────────────┐
+    ▼      ▼                       ▼
+┌────────┐ ┌────────────────┐ ┌────────────────┐
+│Supabase│ │ EmailGate (UI) │ │ Canvas         │
+│Auth    │ │ (Login Form)   │ │ Background (3D)│
+└───┬────┘ └──────┬─────────┘ └──────┬─────────┘
+    │             │                  │
+    ▼             ▼                  ▼
+┌──────────────────────────────────────┐
+│  Transition Animation (2s delay)     │ ← Renders 3D waving/walking animation
+└──────────────┬───────────────────────┘
+               ▼
+┌──────────────────────────────────────┐
+│  MainPortfolio (UI)                  │ ← Loads full portfolio content
+└──────────────────────────────────────┘
+\\\
 
-## React Compiler
+## System Output
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The portfolio application manages transitions between two primary states:
 
-## Expanding the Oxlint configuration
+| State | Component | Output/Behavior |
+|---|---|---|
+| Unauthenticated | \EmailGate\ | Displays a login overlay atop the 3D canvas; waits for Supabase session. |
+| Transitioning | \nimatingOut\ | Triggers a 2-second 3D animation (e.g., character waving and walking off) before granting access. |
+| Authenticated | \MainPortfolio\ | Hides the login gate and renders the actual project galleries and resume data. |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Directory Structure
+
+\\\
+├── index.html                  # Main HTML entry point
+├── package.json                # Project metadata and NPM scripts
+├── vite.config.js              # Vite bundler configuration
+├── README.md                   # Project documentation
+│
+├── public/                     # Static assets (3D models, textures)
+│
+└── src/
+    ├── App.jsx                 # Core routing and authentication logic
+    ├── main.jsx                # React DOM renderer
+    ├── lib/                    # Supabase client configuration
+    ├── data/                   # JSON data for portfolio projects and skills
+    └── components/
+        ├── CanvasBackground.jsx # Persistent 3D Three.js/R3F environment
+        ├── EmailGate.jsx       # Authentication UI overlay
+        └── MainPortfolio.jsx   # Core portfolio rendering component
+\\\
+
+## How to Run
+
+### 1. Prerequisites
+- Node.js (v16+)
+- A Supabase account and project (for authentication)
+
+### 2. Install Dependencies
+
+\\\ash
+# Install node modules
+npm install
+\\\
+
+### 3. Environment Variables
+Create a \.env\ file in the root directory and add your Supabase credentials:
+
+\\\env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+\\\
+
+### 4. Run the Application
+
+\\\ash
+# Start the Vite development server
+npm run dev
+\\\
+
+### 5. Usage
+1. Open \http://localhost:5173\.
+2. You will be greeted by the 3D Canvas Background and the \EmailGate\.
+3. Provide an email or use the Mock Login to bypass authentication.
+4. Watch the 2-second transition animation.
+5. Explore the main portfolio content containing projects, achievements, and contact information.
+
+## Key Design Decisions
+
+1. **Email-Gated Access**: Leveraging Supabase Auth creates an exclusive feel for the portfolio while also allowing tracking of who views the resume.
+2. **Persistent 3D Context**: The \CanvasBackground\ is rendered at the root level outside the conditional UI blocks. This ensures the heavy 3D context isn't re-mounted or destroyed during the login transition, maintaining high performance and smooth visuals.
+3. **Delayed State Updates for Animation**: When authentication succeeds, React state (\nimatingOut\) artificially delays the mounting of \MainPortfolio\ by 2000ms to allow the 3D character to play a "goodbye/welcome" animation, drastically improving UX.
